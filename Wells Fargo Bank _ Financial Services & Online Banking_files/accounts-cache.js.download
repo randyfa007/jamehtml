@@ -1,0 +1,41 @@
+
+  (function main() {
+  var hashedNames = [
+  "runtime.bd6612f680d429d52883.js",
+  "vendor.bce22143e85144f6d513.chunk.js",
+  "main.ecf62c3a02822a5d5939.chunk.js",
+  "wfui.9bb8714839d00df85c4c.chunk.js",
+  "main.ebdd373bd9a28ceb3854.chunk.css",
+  "wfui.5ca2a1f03b3b260c7b2a.chunk.css"
+]
+  function miniGET(src) {
+  var xhr = new XMLHttpRequest()
+  xhr.open('GET', src)
+  xhr.send()
+}
+  function getSelfScriptSrc() {
+  var allScripts = document.getElementsByTagName('script')
+  var scriptCount
+  for (scriptCount = 0; scriptCount < allScripts.length; ++scriptCount) {
+    if (
+      allScripts[scriptCount].src &&
+      allScripts[scriptCount].getAttribute('src').indexOf('accounts-cache') !== -1
+    ) {
+      return allScripts[scriptCount].getAttribute('src').replace('short/accounts-cache.js', '')
+    }
+  }
+  return ''
+}
+  (function cacheAccountsAssetsInJs() {
+  var commonPath = getSelfScriptSrc()
+  hashedNames.forEach(function nameHandler(name) {
+    if (name.indexOf('.js') !== -1) {
+      miniGET(commonPath.concat('public/js/', name))
+    }
+    if (name.indexOf('.css') !== -1) {
+      miniGET(commonPath.concat('public/stylesheets/', name))
+    }
+  })
+}())
+  }())
+  
